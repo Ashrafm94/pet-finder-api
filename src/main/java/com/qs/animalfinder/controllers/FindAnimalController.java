@@ -1,19 +1,17 @@
 package com.qs.animalfinder.controllers;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qs.animalfinder.models.Animal;
-import com.qs.animalfinder.services.AnimalFinderService;
+import com.qs.animalfinder.services.implementations.AnimalFinderService;
+import com.qs.animalfinder.services.interfaces.IAnimalFinderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/find-animal")
@@ -22,11 +20,8 @@ public class FindAnimalController {
 
     private static final Logger logger = LoggerFactory.getLogger(FindAnimalController.class);
 
-    private final AnimalFinderService animalFinderService;
-
-    public FindAnimalController(AnimalFinderService animalFinderService) {
-        this.animalFinderService = animalFinderService;
-    }
+    @Autowired
+    private IAnimalFinderService animalFinderService;
 
     @GetMapping("/find-all")
     public ResponseEntity<List<Animal>> findAll() {

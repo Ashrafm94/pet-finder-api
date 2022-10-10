@@ -1,29 +1,28 @@
-package com.qs.animalfinder.services;
+package com.qs.animalfinder.services.implementations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qs.animalfinder.controllers.FindAnimalController;
 import com.qs.animalfinder.models.Animal;
+import com.qs.animalfinder.services.interfaces.IAnimalFinderService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Service
-public class AnimalFinderService {
+public class AnimalFinderService implements IAnimalFinderService {
     private static final Logger logger = LoggerFactory.getLogger(AnimalFinderService.class);
-    private final RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Value("${petfinder.api.key}")
     private String API_KEY;
@@ -35,10 +34,7 @@ public class AnimalFinderService {
 
     private Date lastFetchTime = null;
 
-    public AnimalFinderService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
+    @Override
     public String authorizeAndGetToken(){
 
         String url = "https://api.petfinder.com/v2/oauth2/token";
@@ -102,6 +98,7 @@ public class AnimalFinderService {
         return null;
     }
 
+    @Override
     public List<Animal> getAnimalsList(String type) {
 
         if (shouldFetchAgain(type)) {
@@ -121,6 +118,7 @@ public class AnimalFinderService {
         }
     }
 
+    @Override
     public List<Animal> getAllAnimals() {
 
         List<String> types = List.of("dog", "cat");

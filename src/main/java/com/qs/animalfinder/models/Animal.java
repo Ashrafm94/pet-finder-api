@@ -2,6 +2,7 @@ package com.qs.animalfinder.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
